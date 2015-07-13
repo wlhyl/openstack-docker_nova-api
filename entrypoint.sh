@@ -83,7 +83,7 @@ if [ ! -f /etc/nova/.complete ];then
 
     $CRUDINI --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
 
-    touch /etc/glance/.complete
+    touch /etc/nova/.complete
 fi
 # 同步数据库
 echo 'select * from instances limit 1;' | mysql -h$NOVA_DB  -unova -p$NOVA_DBPASS nova
