@@ -3,7 +3,7 @@ FROM 10.64.0.50:5000/lzh/openstackbase:kilo
 
 MAINTAINER Zuhui Liu penguin_tux@live.com
 
-ENV BASE_VERSION 2015-07-01
+ENV BASE_VERSION 2015-07-13
 ENV OPENSTACK_VERSION kilo
 
 
