@@ -28,11 +28,11 @@ if [ -z "$RABBIT_PASSWORD" ];then
 fi
 
 if [ -z "$KEYSTONE_ENDPOINT" ];then
-  echo "error: RABBIT_PASSWORD not set"
+  echo "error: KEYSTONE_ENDPOINT not set"
   exit 1
 fi
 
-if [ -z "$KEYSTONE_ENDPOINT" ];then
+if [ -z "$NOVA_PASS" ];then
   echo "error: NOVA_PASS not set. user nova password."
   exit 1
 fi

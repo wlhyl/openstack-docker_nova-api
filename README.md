@@ -1,6 +1,7 @@
 # 环境变量
 - NOVA_DB: nova数据库IP
 - NOVA_DBPASS： novae数据库密码
+- NOVA_PASS: openstack nova用户 密码
 - RABBIT_HOST: rabbitmq IP
 - RABBIT_USERID: rabbitmq user
 - RABBIT_PASSWORD: rabbitmq user 的 password
