@@ -71,13 +71,13 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --del /etc/nova/nova.conf keystone_authtoken
 
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_uri http://$KEYSTONE_ENDPOINT:5000
-    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken identity_uri http://$KEYSTONE_ENDPOINT:35357
+    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_url http://$KEYSTONE_ENDPOINT:35357
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_plugin password
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken project_domain_id default
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken user_domain_id default
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken project_name service
-    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken admin_user nova
-    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken admin_password $NOVA_PASS
+    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken username nova
+    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken password $NOVA_PASS
 
     $CRUDINI --set /etc/nova/nova.conf DEFAULT my_ip $MY_IP
 
