@@ -10,7 +10,7 @@
 - /opt/openstack/nova-cert/: /etc/nova
 - /opt/openstack/log/nova-cert/: /var/log/nova/
 
-# 启动glance
+# 启动nova-api
 docker run -d --name nova-cert -p 8774:8774 \
     -v /opt/openstack/nova-cert/:/etc/nova \
     -v /opt/openstack/log/nova-cert/:/var/log/nova/ \
