@@ -56,6 +56,8 @@ if [ ! -f /etc/nova/.complete ];then
 
     chown nova:nova /var/log/nova/
     
+    $CRUDINI --set /etc/nova/nova.conf DEFAULT enabled_apis osapi_compute,metadata
+
     $CRUDINI --set /etc/nova/nova.conf database connection $CONNECTION
 
     $CRUDINI --set /etc/nova/nova.conf DEFAULT rpc_backend rabbit
