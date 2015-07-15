@@ -5,6 +5,8 @@
 - RABBIT_USERID: rabbitmq user
 - RABBIT_PASSWORD: rabbitmq user 的 password
 - MY_IP: my_ip
+- NEUTRON_ENDPOINT: neutron endpoint
+- NEUTRON_PASS: openstack neutron password
 
 # volumes:
 - /opt/openstack/nova-cert/: /etc/nova
@@ -22,4 +24,6 @@ docker run -d --name nova-cert -p 8774:8774 \
     -e KEYSTONE_ENDPOINT=10.64.0.52 \
     -e MY_IP=10.64.0.52 \
     -e GLANCE_ENDPOINT=10.64.0.52 \
+    -e neutron_endpoint=10.64.0.52 \
+    -e neutron_pass=neutron_pass \
     10.64.0.50:5000/lzh/nova-api:kilo

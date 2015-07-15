@@ -48,6 +48,16 @@ if [ -z "$GLANCE_ENDPOINT" ];then
   exit 1
 fi
 
+if [ -z "$NEUTRON_ENDPOINT" ];then
+  echo "error: NEUTRON_ENDPOINT not set."
+  exit 1
+fi
+
+if [ -z "$NEUTRON_PASS" ];then
+  echo "error: NEUTRON_PASS not set."
+  exit 1
+fi
+
 CRUDINI='/usr/bin/crudini'
 
 CONNECTION=mysql://nova:$NOVA_DBPASS@$NOVA_DB/nova
@@ -84,6 +94,18 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf glance host $GLANCE_ENDPOINT
 
     $CRUDINI --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
+    
+    $CRUDINI --set /etc/nova/nova.conf DEFAULT network_api_class nova.network.neutronv2.api.API
+    $CRUDINI --set /etc/nova/nova.conf DEFAULT security_group_api neutron
+    $CRUDINI --set /etc/nova/nova.conf DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
+    $CRUDINI --set /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
+    
+    $CRUDINI --set /etc/nova/nova.conf neutron url http://${neutron_endpoint}:9696
+    $CRUDINI --set /etc/nova/nova.conf neutron auth_strategy keystone
+    $CRUDINI --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_ENDPOINT:35357/v2.0
+    $CRUDINI --set /etc/nova/nova.conf neutron admin_tenant_name service
+    $CRUDINI --set /etc/nova/nova.conf neutron admin_username neutron
+    $CRUDINI --set /etc/nova/nova.conf neutron admin_password $NEUTRON_PASS
 
     touch /etc/nova/.complete
 fi
