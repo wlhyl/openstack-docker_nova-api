@@ -27,6 +27,6 @@ RUN chmod +x /usr/bin/entrypoint.sh
 
 ADD nova-api.conf /etc/supervisor/conf.d/nova-api.conf
 
-EXPOSE 8774
+EXPOSE 8774 8775
 
 ENTRYPOINT ["/usr/bin/entrypoint.sh"]
