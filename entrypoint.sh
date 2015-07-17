@@ -105,7 +105,7 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
     $CRUDINI --set /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
     
-    $CRUDINI --set /etc/nova/nova.conf neutron url http://${neutron_endpoint}:9696
+    $CRUDINI --set /etc/nova/nova.conf neutron url http://${NEUTRON_ENDPOINT}:9696
     $CRUDINI --set /etc/nova/nova.conf neutron auth_strategy keystone
     $CRUDINI --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_ENDPOINT:35357/v2.0
     $CRUDINI --set /etc/nova/nova.conf neutron admin_tenant_name service
