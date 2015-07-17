@@ -58,6 +58,11 @@ if [ -z "$NEUTRON_PASS" ];then
   exit 1
 fi
 
+if [ -z "$METADATA_PROXY_SHARED_SECRET" ];then
+  echo "error: METADATA_PROXY_SHARED_SECRET not set."
+  exit 1
+fi
+
 CRUDINI='/usr/bin/crudini'
 
 CONNECTION=mysql://nova:$NOVA_DBPASS@$NOVA_DB/nova
@@ -106,6 +111,9 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf neutron admin_tenant_name service
     $CRUDINI --set /etc/nova/nova.conf neutron admin_username neutron
     $CRUDINI --set /etc/nova/nova.conf neutron admin_password $NEUTRON_PASS
+    
+    $CRUDINI --set /etc/nova/nova.conf neutron service_metadata_proxy True
+    $CRUDINI --set /etc/nova/nova.conf neutron metadata_proxy_shared_secret $METADATA_PROXY_SHARED_SECRET
 
     touch /etc/nova/.complete
 fi
