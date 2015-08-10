@@ -7,15 +7,19 @@
 - MY_IP: my_ip
 - NEUTRON_ENDPOINT: neutron endpoint
 - NEUTRON_PASS: openstack neutron password
+- GLANCE_ENDPOINT: glance endpoint
 
 # volumes:
-- /opt/openstack/nova-cert/: /etc/nova
-- /opt/openstack/log/nova-cert/: /var/log/nova/
+- /opt/openstack/nova-api/: /etc/nova
+- /opt/openstack/log/nova-api/: /var/log/nova/
 
 # 启动nova-api
-docker run -d --name nova-cert -p 8774:8774 \
-    -v /opt/openstack/nova-cert/:/etc/nova \
-    -v /opt/openstack/log/nova-cert/:/var/log/nova/ \
+```bash
+docker run -d --name nova-api \
+    -p 8774:8774 \
+    -p 8775:8775 \
+    -v /opt/openstack/nova-api/:/etc/nova \
+    -v /opt/openstack/log/nova-api/:/var/log/nova/ \
     -e NOVA_DB=10.64.0.52 \
     -e NOVA_DBPASS=nova_dbpass \
     -e RABBIT_HOST=10.64.0.52 \
@@ -24,6 +28,7 @@ docker run -d --name nova-cert -p 8774:8774 \
     -e KEYSTONE_ENDPOINT=10.64.0.52 \
     -e MY_IP=10.64.0.52 \
     -e GLANCE_ENDPOINT=10.64.0.52 \
-    -e neutron_endpoint=10.64.0.52 \
-    -e neutron_pass=neutron_pass \
+    -e NEUTRON_ENDPOINT=10.64.0.52 \
+    -e NEUTRON_PASS=neutron_pass \
     10.64.0.50:5000/lzh/nova-api:kilo
+```
