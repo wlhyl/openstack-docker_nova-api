@@ -5,9 +5,11 @@
 - RABBIT_USERID: rabbitmq user
 - RABBIT_PASSWORD: rabbitmq user 的 password
 - MY_IP: my_ip
-- NEUTRON_ENDPOINT: neutron endpoint
+- KEYSTONE_ADMIN_ENDPOINT: keystone admin endpoint
+- KEYSTONE_INTERNAL_ENDPOINT: keystone internal endpoint
+- NEUTRON_INTERNAL_ENDPOINT: neutron internal endpoint
 - NEUTRON_PASS: openstack neutron password
-- GLANCE_ENDPOINT: glance endpoint
+- GLANCE_HOST: glance internal_endpoint
 
 # volumes:
 - /opt/openstack/nova-api/: /etc/nova
@@ -25,7 +27,8 @@ docker run -d --name nova-api \
     -e RABBIT_HOST=10.64.0.52 \
     -e RABBIT_USERID=openstack \
     -e RABBIT_PASSWORD=openstack \
-    -e KEYSTONE_ENDPOINT=10.64.0.52 \
+    -e KEYSTONE_ADMIN_ENDPOINT=10.64.0.52 \
+    -e KEYSTONE_INTERNAL_ENDPOINT=10.64.0.52 \
     -e MY_IP=10.64.0.52 \
     -e GLANCE_ENDPOINT=10.64.0.52 \
     -e NEUTRON_ENDPOINT=10.64.0.52 \

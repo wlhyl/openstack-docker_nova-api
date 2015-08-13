@@ -27,8 +27,13 @@ if [ -z "$RABBIT_PASSWORD" ];then
   exit 1
 fi
 
-if [ -z "$KEYSTONE_ENDPOINT" ];then
-  echo "error: KEYSTONE_ENDPOINT not set"
+if [ -z "$KEYSTONE_INTERNAL_ENDPOINT" ];then
+  echo "error: KEYSTONE_INTERNAL_ENDPOINT not set"
+  exit 1
+fi
+
+if [ -z "$KEYSTONE_ADMIN_ENDPOINT" ];then
+  echo "error: KEYSTONE_ADMIN_ENDPOINT not set"
   exit 1
 fi
 
@@ -42,14 +47,14 @@ if [ -z "$MY_IP" ];then
   exit 1
 fi
 
-# GLANCE_ENDPOINT = pillar['glance']['endpoint']
-if [ -z "$GLANCE_ENDPOINT" ];then
-  echo "error: GLANCE_ENDPOINT not set."
+# GLANCE_HOST = pillar['glance']['internal_endpoint']
+if [ -z "$GLANCE_HOST" ];then
+  echo "error: GLANCE_HOST not set."
   exit 1
 fi
 
-if [ -z "$NEUTRON_ENDPOINT" ];then
-  echo "error: NEUTRON_ENDPOINT not set."
+if [ -z "$NEUTRON_INTERNAL_ENDPOINT" ];then
+  echo "error: NEUTRON_INTERNAL_ENDPOINT not set."
   exit 1
 fi
 
@@ -68,8 +73,6 @@ CRUDINI='/usr/bin/crudini'
 CONNECTION=mysql://nova:$NOVA_DBPASS@$NOVA_DB/nova
 if [ ! -f /etc/nova/.complete ];then
     cp -rp /nova/* /etc/nova
-
-    chown nova:nova /var/log/nova/
     
     $CRUDINI --set /etc/nova/nova.conf DEFAULT enabled_apis osapi_compute,metadata
 
@@ -85,8 +88,8 @@ if [ ! -f /etc/nova/.complete ];then
 
     $CRUDINI --del /etc/nova/nova.conf keystone_authtoken
 
-    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_uri http://$KEYSTONE_ENDPOINT:5000
-    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_url http://$KEYSTONE_ENDPOINT:35357
+    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_uri http://$KEYSTONE_INTERNAL_ENDPOINT:5000
+    $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken auth_plugin password
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken project_domain_id default
     $CRUDINI --set /etc/nova/nova.conf keystone_authtoken user_domain_id default
@@ -96,7 +99,7 @@ if [ ! -f /etc/nova/.complete ];then
 
     $CRUDINI --set /etc/nova/nova.conf DEFAULT my_ip $MY_IP
 
-    $CRUDINI --set /etc/nova/nova.conf glance host $GLANCE_ENDPOINT
+    $CRUDINI --set /etc/nova/nova.conf glance host $GLANCE_HOST
 
     $CRUDINI --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
     
@@ -105,9 +108,9 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
     $CRUDINI --set /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
     
-    $CRUDINI --set /etc/nova/nova.conf neutron url http://${NEUTRON_ENDPOINT}:9696
+    $CRUDINI --set /etc/nova/nova.conf neutron url http://${NEUTRON_INTERNAL_ENDPOINT}:9696
     $CRUDINI --set /etc/nova/nova.conf neutron auth_strategy keystone
-    $CRUDINI --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_ENDPOINT:35357/v2.0
+    $CRUDINI --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357/v2.0
     $CRUDINI --set /etc/nova/nova.conf neutron admin_tenant_name service
     $CRUDINI --set /etc/nova/nova.conf neutron admin_username neutron
     $CRUDINI --set /etc/nova/nova.conf neutron admin_password $NEUTRON_PASS
@@ -122,5 +125,7 @@ echo 'select * from instances limit 1;' | mysql -h$NOVA_DB  -unova -p$NOVA_DBPAS
 if [ $? != 0 ];then
     su -s /bin/sh -c "nova-manage db sync" nova
 fi
+
+chown -R nova:nova /var/log/nova/
 
 /usr/bin/supervisord -n
