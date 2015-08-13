@@ -30,8 +30,8 @@ docker run -d --name nova-api \
     -e KEYSTONE_ADMIN_ENDPOINT=10.64.0.52 \
     -e KEYSTONE_INTERNAL_ENDPOINT=10.64.0.52 \
     -e MY_IP=10.64.0.52 \
-    -e GLANCE_ENDPOINT=10.64.0.52 \
-    -e NEUTRON_ENDPOINT=10.64.0.52 \
+    -e GLANCE_INTERNAL_ENDPOINT=10.64.0.52 \
+    -e NEUTRON_INTERNAL_ENDPOINT=10.64.0.52 \
     -e NEUTRON_PASS=neutron_pass \
     10.64.0.50:5000/lzh/nova-api:kilo
 ```
