@@ -15,6 +15,7 @@ RUN env --unset=DEBIAN_FRONTEND
 
 RUN cp -rp /etc/nova/ /nova
 RUN rm -rf /var/log/nova/*
+RUN rm -rf /var/lib/nova/nova.sqlite
 
 VOLUME ["/etc/nova"]
 VOLUME ["/var/log/nova"]
