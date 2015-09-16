@@ -9,10 +9,7 @@ ENV OPENSTACK_VERSION kilo
 
 ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update
-RUN apt-get dist-upgrade -y
-RUN apt-get -t jessie-backports install nova-api iptables -y
-RUN apt-get clean
+RUN apt-get update && apt-get dist-upgrade && apt-get install nova-api iptables -y && apt-get clean
 
 RUN env --unset=DEBIAN_FRONTEND
 
