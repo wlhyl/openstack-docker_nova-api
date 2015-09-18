@@ -120,12 +120,13 @@ if [ ! -f /etc/nova/.complete ];then
 
     touch /etc/nova/.complete
 fi
+
+chown -R nova:nova /var/log/nova/
+
 # 同步数据库
 echo 'select * from instances limit 1;' | mysql -h$NOVA_DB  -unova -p$NOVA_DBPASS nova
 if [ $? != 0 ];then
     su -s /bin/sh -c "nova-manage db sync" nova
 fi
-
-chown -R nova:nova /var/log/nova/
 
 /usr/bin/supervisord -n
