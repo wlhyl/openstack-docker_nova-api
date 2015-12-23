@@ -8,7 +8,7 @@ ENV OPENSTACK_VERSION liberty
 ENV BUILD_VERSION 2015-12-23
 
 RUN yum update -y
-RUN yum install -y nova-api iptables
+RUN yum install -y openstack-nova-api iptables
 RUN yum clean all
 RUN rm -rf /var/cache/yum/*
 
