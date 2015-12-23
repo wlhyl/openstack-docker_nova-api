@@ -102,6 +102,7 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf glance host $GLANCE_HOST
 
     $CRUDINI --set /etc/nova/nova.conf oslo_concurrency lock_path /var/lib/nova/tmp
+    $CRUDINI --set /etc/nova/nova.conf DEFAULT state_path /var/lib/nova
     
     $CRUDINI --set /etc/nova/nova.conf DEFAULT network_api_class nova.network.neutronv2.api.API
     $CRUDINI --set /etc/nova/nova.conf DEFAULT security_group_api neutron
