@@ -1,21 +1,20 @@
-# image name lzh/nova-api:kilo
-FROM registry.lzh.site:5000/lzh/openstackbase:kilo
+# image name lzh/nova-api:liberty
+FROM 10.64.0.50:5000/lzh/openstackbase:liberty
 
 MAINTAINER Zuhui Liu penguin_tux@live.com
 
-ENV BASE_VERSION 2015-07-14
-ENV OPENSTACK_VERSION kilo
+ENV BASE_VERSION 2015-12-23
+ENV OPENSTACK_VERSION liberty
+ENV BUILD_VERSION 2015-12-23
 
-
-ENV DEBIAN_FRONTEND noninteractive
-
-RUN apt-get update && apt-get dist-upgrade && apt-get install nova-api iptables -y && apt-get clean
-
-RUN env --unset=DEBIAN_FRONTEND
+RUN yum update -y
+RUN yum install -y nova-api iptables
+RUN yum clean all
+RUN rm -rf /var/cache/yum/*
 
 RUN cp -rp /etc/nova/ /nova
+RUN rm -rf /etc/nova/*
 RUN rm -rf /var/log/nova/*
-RUN rm -rf /var/lib/nova/nova.sqlite
 
 VOLUME ["/etc/nova"]
 VOLUME ["/var/log/nova"]
@@ -23,7 +22,7 @@ VOLUME ["/var/log/nova"]
 ADD entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
 
-ADD nova-api.conf /etc/supervisor/conf.d/nova-api.conf
+ADD nova-api.ini /etc/supervisord.d/nova-api.ini
 
 EXPOSE 8774 8775
 
