@@ -124,6 +124,7 @@ if [ ! -f /etc/nova/.complete ];then
 fi
 
 chown -R nova:nova /var/log/nova/
+chown -R nova:nova /var/lib/nova/
 
 # 同步数据库
 echo 'select * from instances limit 1;' | mysql -h$NOVA_DB  -unova -p$NOVA_DBPASS nova
