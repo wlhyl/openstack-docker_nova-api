@@ -68,6 +68,11 @@ if [ -z "$METADATA_PROXY_SHARED_SECRET" ];then
   exit 1
 fi
 
+if [ -z "$REGION_NAME" ];then
+  echo "error: REGION_NAME not set."
+  exit 1
+fi
+
 CRUDINI='/usr/bin/crudini'
 
 CONNECTION=mysql://nova:$NOVA_DBPASS@$NOVA_DB/nova
@@ -109,12 +114,16 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf DEFAULT linuxnet_interface_driver nova.network.linux_net.LinuxOVSInterfaceDriver
     $CRUDINI --set /etc/nova/nova.conf DEFAULT firewall_driver nova.virt.firewall.NoopFirewallDriver
     
+    $CRUDINI --del /etc/nova/nova.conf neutron
     $CRUDINI --set /etc/nova/nova.conf neutron url http://${NEUTRON_INTERNAL_ENDPOINT}:9696
-    $CRUDINI --set /etc/nova/nova.conf neutron auth_strategy keystone
-    $CRUDINI --set /etc/nova/nova.conf neutron admin_auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357/v2.0
-    $CRUDINI --set /etc/nova/nova.conf neutron admin_tenant_name service
-    $CRUDINI --set /etc/nova/nova.conf neutron admin_username neutron
-    $CRUDINI --set /etc/nova/nova.conf neutron admin_password $NEUTRON_PASS
+    $CRUDINI --set /etc/nova/nova.conf neutron auth_url http://$KEYSTONE_ADMIN_ENDPOINT:35357
+    $CRUDINI --set /etc/nova/nova.conf neutron auth_region  $REGION_NAME
+    $CRUDINI --set /etc/nova/nova.conf neutron auth_plugin password
+    $CRUDINI --set /etc/nova/nova.conf neutron project_domain_id default
+    $CRUDINI --set /etc/nova/nova.conf neutron user_domain_id default
+    $CRUDINI --set /etc/nova/nova.conf neutron project_name service
+    $CRUDINI --set /etc/nova/nova.conf neutron username neutron
+    $CRUDINI --set /etc/nova/nova.conf neutron password $NEUTRON_PASS
     
     $CRUDINI --set /etc/nova/nova.conf neutron service_metadata_proxy True
     $CRUDINI --set /etc/nova/nova.conf neutron metadata_proxy_shared_secret $METADATA_PROXY_SHARED_SECRET

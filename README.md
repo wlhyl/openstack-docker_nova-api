@@ -10,6 +10,7 @@
 - NEUTRON_INTERNAL_ENDPOINT: neutron internal endpoint
 - NEUTRON_PASS: openstack neutron password
 - GLANCE_HOST: glance internal_endpoint
+- REGION_NAME: RegionOne
 
 # volumes:
 - /opt/openstack/nova-api/: /etc/nova
