@@ -128,8 +128,10 @@ if [ ! -f /etc/nova/.complete ];then
     $CRUDINI --set /etc/nova/nova.conf neutron service_metadata_proxy True
     $CRUDINI --set /etc/nova/nova.conf neutron metadata_proxy_shared_secret $METADATA_PROXY_SHARED_SECRET
     
+    $CRUDINI --set /etc/nova/nova.conf cinder os_region_name $REGION_NAME
     # 禁止跨zone附加volume到instance
     $CRUDINI --set /etc/nova/nova.conf cinder cross_az_attach False
+    
     touch /etc/nova/.complete
 fi
 
